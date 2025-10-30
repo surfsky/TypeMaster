@@ -1,6 +1,6 @@
 # TypeMaster
 
-这是个打字练习软件，包括基础打字练习、英语单词、Python编程等。用的技术栈为：React + TypeScript + Vite + Mantine + eslint。
+打字练习软件，包括基础打字练习、英语单词、Python编程等。用的技术栈为：React + TypeScript + Vite + Mantine + eslint。
 
 ![list1](./doc/list1.png)
 ![list2](./doc/list2.png)
