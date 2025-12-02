@@ -2,6 +2,7 @@ import { SimpleGrid, Card, Group, Badge, Title, Text, Button, Stack } from '@man
 import { useNavigate } from 'react-router-dom'
 import { levels } from '../config/levels'
 import { useMemo } from 'react'
+import { getScore } from '../config/progress'
 
 /**关卡页面：展示关卡列表 */
 function Levels() {
@@ -29,7 +30,7 @@ function Levels() {
       }}
       mih={'100vh'}
     >
-      <Title order={1} ta="center" my="xl" c="white" style={{ fontFamily: 'Montserrat, sans-serif' }}>Type Master 打字大师</Title>
+      <Title order={1} ta="center" my="xl" c="white" style={{ fontFamily: 'Montserrat, sans-serif', textShadow: '0 0 20px rgba(0, 0, 0, 0.8)' }}>Type Master 打字达人</Title>
       {Object.entries(groupedLevels).map(([cat, lvs]) => (
         <Stack key={cat} px={'md'}>
           <Title order={3} c="white">{cat}</Title>
@@ -44,7 +45,13 @@ function Levels() {
                 styles={{ root: { ':hover': { transform: 'scale(1.02)' } } }}>
                 <Group justify="space-between" mb="xs">
                   <Title order={4} c="white">{lv.title}</Title>
-                  <Badge variant="light">{lv.cat}</Badge>
+                  <Group gap="xs">
+                    <Badge variant="light">{lv.cat}</Badge>
+                    {(() => {
+                      const s = getScore(lv.id)
+                      return s ? <Badge color="orange" variant="filled">{s.score}分</Badge> : null
+                    })()}
+                  </Group>
                 </Group>
                 <Text size="sm" c="gray.4" lineClamp={2}>{lv.text}</Text>
                 <Group justify="flex-end" mt="md">
@@ -56,8 +63,9 @@ function Levels() {
         </Stack>
       ))}
       <Stack ta="center" mt="xl" pb="md" gap={0}>
-        <Text size="sm">定制请联系：surfsky@189.cn</Text>
+        <Text size="sm">version 1.1.0</Text>
         <Text size="sm">CopyRight 2025 All Rights Reserved</Text>
+        <Text size="sm">定制请联系：surfsky@189.cn 或微信 surfsky</Text>
       </Stack>
     </Stack>
   )

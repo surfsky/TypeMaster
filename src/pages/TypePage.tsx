@@ -2,11 +2,12 @@ import { ActionIcon, Box, Button, Grid, Group, Modal, Paper, Slider, Stack, Swit
 import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { IconArrowBack, IconRotateClockwise, IconSettings } from '@tabler/icons-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Keyboard from '../components/Keyboard'
 import { levels } from '../config/levels'
 import type { Level } from '../config/levels'
+import { setCompleted, getCompleted, setScore } from '../config/progress'
 import { Howl } from 'howler'
 
 // sound
@@ -21,8 +22,100 @@ const backSound = new Howl({src: [backSoundFile]});
 
 
 
-/*********************************************************
- * 打字页
+/** 将含 // 注释的文本拆成正文+注释（行末\n归入注释） */
+function parseTextWithComment(raw: string) {
+  const lines = raw.split('\n')
+  return lines.map((line, i) => {
+    const idx = line.indexOf('//')
+    const hasComment = idx !== -1
+    // 正文：不含 // 的部分，且去掉尾部空格
+    const text = hasComment ? line.slice(0, idx).replace(/\s+$/, '') : line.replace(/\s+$/, '')
+    // 注释：含 // 到行尾，再加上本行后的 \n（最后一行除外）
+    let comment = hasComment ? line.slice(idx) : undefined
+    if (i < lines.length - 1 && comment !== undefined) {
+      comment += '\n'
+    }
+    return { text, comment }
+  })
+}
+
+/** 渲染一行正文+注释 */
+function LineWithComment({
+  line,
+  startIdx,
+  idx,
+  errors,
+  fontSize,
+}: {
+  line: { text: string; comment?: string }
+  startIdx: number
+  idx: number
+  errors: Set<number>
+  fontSize: number
+}) {
+  const chars: React.ReactNode[] = []
+  // 正文部分
+  for (let i = 0; i < line.text.length; i++) {
+    const globalI = startIdx + i
+    const isTyped = globalI < idx
+    const isError = errors.has(globalI)
+    const isCurrent = globalI === idx
+    let color = ''
+    if (isTyped && !isError) color = 'green'
+    if (isError) color = 'red'
+    const ch = line.text[i] === '\n' ? '⏎\n' : line.text[i]
+    chars.push(
+      <Text
+        key={globalI}
+        component="span"
+        c={color}
+        style={{
+          fontSize,
+          textDecoration: isCurrent ? 'underline' : 'none',
+          backgroundColor: isError ? 'var(--mantine-color-red-light-hover)' : 'transparent',
+        }}
+      >
+        {ch}
+      </Text>
+    )
+  }
+  // 注释部分（暗绿色，不参与打字）
+  if (line.comment) {
+    const commentText = line.comment.replace(/\n$/, '')
+    chars.push(
+      <Text key="comment" component="span" c="yellow.6" style={{ fontSize, opacity: 0.75 }}>
+        {commentText}
+      </Text>
+    )
+  }
+  {
+    const globalI = startIdx + line.text.length
+    const isTyped = globalI < idx
+    const isError = errors.has(globalI)
+    const isCurrent = globalI === idx
+    let color = ''
+    if (isTyped && !isError) color = 'green'
+    if (isError) color = 'red'
+    chars.push(
+      <Text
+        key={`nl-${globalI}`}
+        component="span"
+        c={color}
+        style={{
+          fontSize,
+          textDecoration: isCurrent ? 'underline' : 'none',
+          backgroundColor: isError ? 'var(--mantine-color-red-light-hover)' : 'transparent',
+        }}
+      >
+        {'⏎'}
+      </Text>
+    )
+  }
+  return <>{chars}</>
+}
+
+/************************************************************
+ * 打字页：展示关卡文本，接收用户输入，计算成绩
  ************************************************************/
 export default function TypePage() {
   const navigate = useNavigate()
@@ -30,7 +123,7 @@ export default function TypePage() {
   const lv = levels.find((o: Level) => o.id === id)!
 
   const [idx, setIdx] = useState(0)
-  const [fontSize, setFontSize] = useState(36)
+  const [fontSize, setFontSize] = useState(lv.fontSize || 36)
   const [startTime, setStartTime] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [backspace, setBackspace] = useState(0)
@@ -40,6 +133,18 @@ export default function TypePage() {
   const [showKeyboard, setShowKeyboard] = useState(true)
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false)
+
+  useEffect(() => {
+    setFontSize(lv.fontSize || 36)
+  }, [id])
+
+  // 解析正文与注释
+  const parsedLines = useMemo(() => parseTextWithComment(lv.text), [lv.text])
+  // 仅正文的连续字符串（用于打字判定）
+  const plainText = parsedLines.map(l => l.text).join('\n')
+
+  // 是否全部完成
+  const allCompleted = levels.every(l => getCompleted().includes(l.id))
 
   const paperRef = useRef<HTMLDivElement>(null)
 
@@ -54,21 +159,26 @@ export default function TypePage() {
     setErrors(new Set())
   }, [])
 
-  /**
-   * 前往下一关
-   */
+  /**前往下一关（按顺序） */
   const goToNextLevel = useCallback(() => {
-    const i = levels.findIndex((o: Level) => o.id === id)
-    if (i < levels.length - 1) {
-      const next = levels[i + 1]
-      navigate(`/type/${next.id}`)
+    if (!id) return
+    
+    const currentIndex = levels.findIndex(lv => lv.id === id)
+    if (currentIndex === -1) return
+    
+    const nextIndex = currentIndex + 1
+    
+    if (nextIndex < levels.length) {
+      // 跳到下一关
+      navigate(`/type/${levels[nextIndex].id}`)
       reset()
     } else {
+      // 已到达最后一关
       modals.open({
         title: '恭喜！',
         children: (
           <>
-            <Text>您已完成所有训练！</Text>
+            <Text>您已完成所有关卡！</Text>
             <Group justify="flex-end" mt="md">
               <Button onClick={() => {
                 navigate('/')
@@ -79,13 +189,13 @@ export default function TypePage() {
         ),
       })
     }
-  }, [id, navigate, reset])
+  }, [id, navigate, reset, levels])
 
   /**
    * 处理按键
    */
   const handleKeyPress = useCallback((key: string) => {
-    if (idx >= lv.text.length) {
+    if (idx >= plainText.length) {
       if (key === 'Enter') {
         goToNextLevel()
         modals.closeAll()
@@ -124,7 +234,7 @@ export default function TypePage() {
     }
 
     // match
-    const expected = lv.text[idx];
+    const expected = plainText[idx];
     const isMatch = ch === expected;
     console.log(`Typed: '${ch}' (${ch.charCodeAt(0)}), Expected: '${expected}' (${expected.charCodeAt(0)})`);
     setDebugInfo(`Typed: '${ch}', Expected: '${expected}', Match: ${isMatch}`)
@@ -146,12 +256,12 @@ export default function TypePage() {
 
     // move to next
     setIdx(i => i + 1)
-    if (idx === lv.text.length - 1) {
+    if (idx === plainText.length - 1) {
       if (soundEnabled) {
         levelPassSound.play();
       }
     }
-  }, [lv.text, reset, startTime, idx, mistakes, errors, backspace, goToNextLevel, soundEnabled])
+  }, [plainText, reset, startTime, idx, mistakes, errors, backspace, goToNextLevel, soundEnabled])
 
   /**
    * 监听键盘事件
@@ -176,11 +286,13 @@ export default function TypePage() {
    * 显示统计信息
    */
   useEffect(() => {
-    if (idx === lv.text.length && lv.text.length > 0) {
+    if (idx === plainText.length && plainText.length > 0) {
+      setCompleted(lv.id)
       const duration = (Date.now() - startTime) / 1000
-      const wpm = Math.round(lv.text.length / 5 / (duration / 60))
-      const accuracy = Math.round((lv.text.length - mistakes) / lv.text.length * 100)
-      const score = Math.max(0, accuracy - backspace * 2)
+      const wpm = Math.round(plainText.length  / (duration / 60))   // 每分钟字符数
+      const accuracy = Math.round((plainText.length - mistakes) / plainText.length * 100)
+      const score = Math.round(wpm/2 * (accuracy / 100)) - backspace
+      setScore(lv.id, { score, wpm, accuracy, backspace, duration, ts: Date.now() })
 
       modals.open({
         title: '统计',
@@ -197,12 +309,15 @@ export default function TypePage() {
               </Stack>
               <Paper  p="md" radius="md" style={{ borderColor: 'red' }}>
                 <Stack gap={0} align="flex-end">
-                  <Text fz={64} fw={700} c="red" fs="italic">{score}</Text>
-                  <Text fz="sm" c="red">分</Text>
+                  <Text fz={64} fw={700} c="orange" fs="italic">{score}</Text>
+                  <Text fz="sm" c="orange">分</Text>
                 </Stack>
               </Paper>
             </Group>
-            <Group justify="flex-end" mt="md">
+            <Group justify="space-between" mt="md">
+              <Text c={allCompleted ? 'green' : 'dimmed'} size="sm">
+                {allCompleted ? '全部关卡已完成' : '可继续挑战未完成关卡'}
+              </Text>
               <Button onClick={() => {
                 reset()
                 modals.closeAll()
@@ -216,7 +331,7 @@ export default function TypePage() {
         ),
       })
     }
-  }, [idx, lv.text.length, startTime, mistakes, backspace, goToNextLevel, reset, errors])
+  }, [idx, lv.id, plainText.length, startTime, mistakes, backspace, goToNextLevel, reset, errors])
 
   return (
     <Stack p="md" style={{ height: '100vh' }}>
@@ -245,25 +360,21 @@ export default function TypePage() {
           padding: '16px',
         }}>
           <Box style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-            {lv.text.split('').map((ch, i) => {
-              const isTyped = i < idx
-              const isError = errors.has(i)
-              const isCurrent = i === idx
-
-              let color = ''
-              if (isTyped && !isError) color = 'green'
-              if (isError) color = 'red'
-
+            {parsedLines.map((line, lineIdx) => {
+              // 计算该行正文起始在 plainText 中的全局索引
+              const startIdx = parsedLines
+                .slice(0, lineIdx)
+                .reduce((acc, l) => acc + l.text.length + 1, 0) // +1 for '\n'
               return (
-                <Text
-                  key={i}
-                  component="span"
-                  c={color}
-                  style={{
-                    fontSize,
-                    textDecoration: isCurrent ? 'underline' : 'none',
-                    backgroundColor: isError ? 'var(--mantine-color-red-light-hover)' : 'transparent'
-                  }}>{ch === '\n' ? '⏎\n' : ch}</Text>
+                <Box key={lineIdx} style={{ minHeight: '1em' }}>
+                  <LineWithComment
+                    line={line}
+                    startIdx={startIdx}
+                    idx={idx}
+                    errors={errors}
+                    fontSize={fontSize}
+                  />
+                </Box>
               )
             })}
           </Box>
@@ -280,7 +391,7 @@ export default function TypePage() {
             </Grid.Col>
             <Grid.Col span={8}>
               <Slider
-                defaultValue={fontSize}
+                value={fontSize}
                 min={12}
                 max={128}
                 step={1}
@@ -316,7 +427,7 @@ export default function TypePage() {
       <Transition mounted={showKeyboard} transition="slide-up" duration={300} timingFunction="ease">
         {styles => (
           <Box style={styles} pb="xl">
-            <Keyboard neededKey={lv.text[idx]} pressedKey={pressedKey} onKeyPress={handleKeyPress} />
+            <Keyboard neededKey={plainText[idx]} pressedKey={pressedKey} onKeyPress={handleKeyPress} />
           </Box>
         )}
       </Transition>
