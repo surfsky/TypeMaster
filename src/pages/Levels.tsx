@@ -2,7 +2,7 @@ import { SimpleGrid, Card, Group, Badge, Title, Text, Button, Stack } from '@man
 import { useNavigate } from 'react-router-dom'
 import { levels } from '../config/levels'
 import { useMemo } from 'react'
-import { getScore } from '../config/progress'
+import { ProgressManager } from '../config/progress'
 
 /**关卡页面：展示关卡列表 */
 function Levels() {
@@ -48,7 +48,7 @@ function Levels() {
                   <Group gap="xs">
                     <Badge variant="light">{lv.cat}</Badge>
                     {(() => {
-                      const s = getScore(lv.id)
+                      const s = ProgressManager.getScore(lv.id)
                       return s ? <Badge color="orange" variant="filled">{s.score}分</Badge> : null
                     })()}
                   </Group>

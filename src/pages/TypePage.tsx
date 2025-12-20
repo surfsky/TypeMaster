@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Button, Grid, Group, Modal, Paper, Slider, Stack, Switch, Text, Title, Transition } from '@mantine/core'
+import { ActionIcon, Badge, Box, Button, Grid, Group, Modal, Paper, Slider, Stack, Switch, Text, Title, Transition } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { IconArrowBack, IconRotateClockwise, IconSettings } from '@tabler/icons-react'
@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Keyboard from '../components/Keyboard'
 import { levels } from '../config/levels'
 import type { Level } from '../config/levels'
-import { setCompleted, getCompleted, setScore } from '../config/progress'
+import { ProgressManager } from '../config/progress'
 import { Howl } from 'howler'
 
 // sound
@@ -133,10 +133,14 @@ export default function TypePage() {
   const [showKeyboard, setShowKeyboard] = useState(true)
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false)
+  const [imeStatus, setImeStatus] = useState('')
+  const [imeLang, setImeLang] = useState<'en' | 'cn'>('en')
+  const imeTimerRef = useRef<number | null>(null)
+  const imeInputRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     setFontSize(lv.fontSize || 36)
-  }, [id])
+  }, [id, lv.fontSize])
 
   // 解析正文与注释
   const parsedLines = useMemo(() => parseTextWithComment(lv.text), [lv.text])
@@ -144,7 +148,7 @@ export default function TypePage() {
   const plainText = parsedLines.map(l => l.text).join('\n')
 
   // 是否全部完成
-  const allCompleted = levels.every(l => getCompleted().includes(l.id))
+  
 
   const paperRef = useRef<HTMLDivElement>(null)
 
@@ -162,7 +166,6 @@ export default function TypePage() {
   /**前往下一关（按顺序） */
   const goToNextLevel = useCallback(() => {
     if (!id) return
-    
     const currentIndex = levels.findIndex(lv => lv.id === id)
     if (currentIndex === -1) return
     
@@ -189,7 +192,7 @@ export default function TypePage() {
         ),
       })
     }
-  }, [id, navigate, reset, levels])
+  }, [id, navigate, reset])
 
   /**
    * 处理按键
@@ -225,10 +228,11 @@ export default function TypePage() {
       return
     }
 
-    // 只处理单字符的键
-    if (key.length !== 1 && key !== 'Enter') return;
-    setPressedKey(key);
+    // 只处理符合条件的键
+    if (key !== 'Enter' && key.length > 1 && key !== 'Backspace') return;
     const ch = key === 'Enter' ? '\n' : key;
+
+    setPressedKey(key);
     if (idx === 0 && startTime === 0) {
       setStartTime(Date.now())
     }
@@ -261,19 +265,21 @@ export default function TypePage() {
         levelPassSound.play();
       }
     }
-  }, [plainText, reset, startTime, idx, mistakes, errors, backspace, goToNextLevel, soundEnabled])
+  }, [plainText, reset, startTime, idx, goToNextLevel, soundEnabled])
 
   /**
-   * 监听键盘事件
+   * 监听键盘事件（英文与控制键）
    */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      handleKeyPress(e.key)
+      if ((e as KeyboardEvent).isComposing) return
+      const k = e.key
+      if (k.length === 1 || k === 'Enter' || k === 'Backspace' || k === 'Escape') {
+        setImeLang('en')
+        handleKeyPress(k)
+      }
     }
-    const onKeyUp = () => {
-      setPressedKey(undefined)
-    }
-
+    const onKeyUp = () => setPressedKey(undefined)
     window.addEventListener('keydown', onKey)
     window.addEventListener('keyup', onKeyUp)
     return () => {
@@ -282,17 +288,22 @@ export default function TypePage() {
     }
   }, [handleKeyPress])
 
+  useEffect(() => {
+    imeInputRef.current?.focus()
+  }, [])
+
   /**
    * 显示统计信息
    */
   useEffect(() => {
     if (idx === plainText.length && plainText.length > 0) {
-      setCompleted(lv.id)
+      ProgressManager.setCompleted(lv.id)
       const duration = (Date.now() - startTime) / 1000
       const wpm = Math.round(plainText.length  / (duration / 60))   // 每分钟字符数
       const accuracy = Math.round((plainText.length - mistakes) / plainText.length * 100)
       const score = Math.round(wpm/2 * (accuracy / 100)) - backspace
-      setScore(lv.id, { score, wpm, accuracy, backspace, duration, ts: Date.now() })
+      ProgressManager.setScore(lv.id, { score, wpm, accuracy, backspace, duration, ts: Date.now() })
+      const allCompleted = levels.every(l => ProgressManager.getCompleted().includes(l.id))
 
       modals.open({
         title: '统计',
@@ -334,7 +345,7 @@ export default function TypePage() {
   }, [idx, lv.id, plainText.length, startTime, mistakes, backspace, goToNextLevel, reset, errors])
 
   return (
-    <Stack p="md" style={{ height: '100vh' }}>
+    <Stack p="md" style={{ height: '100vh' }} onClick={() => imeInputRef.current?.focus()}>
       <Group justify="space-between" mb="md" style={{ position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'var(--mantine-color-body)' }}>
         <ActionIcon variant="default" size="lg" aria-label="Settings">
           <IconArrowBack onClick={() => navigate('/')} />
@@ -378,9 +389,42 @@ export default function TypePage() {
               )
             })}
           </Box>
+          <Group justify="flex-end" mt="xs">
+            <Badge size="xs" variant="outline" color={imeLang === 'cn' ? 'red' : 'green'}>
+              {imeLang === 'cn' ? '中' : 'En'}
+            </Badge>
+          </Group>
         </Paper>
 
         {debugInfo && <Text c="dimmed" size="sm" mt="md">{debugInfo}</Text>}
+        {imeStatus && <Text c="blue" size="xs" mt="xs">{imeStatus}</Text>}
+
+        <textarea
+          ref={imeInputRef}
+          value={''}
+          onCompositionStart={() => {
+            setImeLang('cn')
+            if (imeTimerRef.current) window.clearTimeout(imeTimerRef.current)
+          }}
+          onCompositionUpdate={e => {
+            const d = (e as unknown as CompositionEvent & { data?: string }).data
+            setImeStatus(`候选：${d ?? ''}`)
+            setImeLang('cn')
+          }}
+          onCompositionEnd={e => {
+            setImeLang('cn')
+            if (imeTimerRef.current) window.clearTimeout(imeTimerRef.current)
+            imeTimerRef.current = window.setTimeout(() => {
+              setImeLang('en')
+            }, 800)
+            const data = (e as unknown as CompositionEvent & { data?: string }).data || ''
+            if (data) {
+              for (const ch of data) handleKeyPress(ch)
+            }
+          }}
+          onKeyDown={() => {}}
+          style={{ position: 'fixed', left: -9999, top: -9999, opacity: 0, width: 1, height: 1 }}
+        />
       </Stack>
 
       <Modal opened={settingsOpened} onClose={closeSettings} title="设置" size="sm" centered>

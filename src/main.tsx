@@ -12,6 +12,7 @@ import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import Levels from "./pages/Levels";
 import TypePage from "./pages/TypePage";
+import ImeTest from "./pages/ImeTest";
 
 const router = createHashRouter([
   {
@@ -25,6 +26,10 @@ const router = createHashRouter([
       {
         path: "/type/:id",
         element: <TypePage />,
+      },
+      {
+        path: "/ime-test",
+        element: <ImeTest />,
       },
     ],
   },
