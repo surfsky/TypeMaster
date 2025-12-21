@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Keyboard from '../components/Keyboard'
 import { levels } from '../config/levels'
 import type { Level } from '../config/levels'
-import { setCompleted, getCompleted, setScore } from '../config/progress'
+import { ProgressManager } from '../config/progress'
 import { Howl } from 'howler'
 
 // sound
@@ -136,7 +136,7 @@ export default function TypePage() {
 
   useEffect(() => {
     setFontSize(lv.fontSize || 36)
-  }, [id])
+  }, [id, lv.fontSize])
 
   // 解析正文与注释
   const parsedLines = useMemo(() => parseTextWithComment(lv.text), [lv.text])
@@ -144,7 +144,7 @@ export default function TypePage() {
   const plainText = parsedLines.map(l => l.text).join('\n')
 
   // 是否全部完成
-  const allCompleted = levels.every(l => getCompleted().includes(l.id))
+  
 
   const paperRef = useRef<HTMLDivElement>(null)
 
@@ -162,7 +162,6 @@ export default function TypePage() {
   /**前往下一关（按顺序） */
   const goToNextLevel = useCallback(() => {
     if (!id) return
-    
     const currentIndex = levels.findIndex(lv => lv.id === id)
     if (currentIndex === -1) return
     
@@ -189,7 +188,7 @@ export default function TypePage() {
         ),
       })
     }
-  }, [id, navigate, reset, levels])
+  }, [id, navigate, reset])
 
   /**
    * 处理按键
@@ -261,7 +260,7 @@ export default function TypePage() {
         levelPassSound.play();
       }
     }
-  }, [plainText, reset, startTime, idx, mistakes, errors, backspace, goToNextLevel, soundEnabled])
+  }, [plainText, reset, startTime, idx, goToNextLevel, soundEnabled])
 
   /**
    * 监听键盘事件
@@ -287,12 +286,13 @@ export default function TypePage() {
    */
   useEffect(() => {
     if (idx === plainText.length && plainText.length > 0) {
-      setCompleted(lv.id)
+      ProgressManager.setCompleted(lv.id)
       const duration = (Date.now() - startTime) / 1000
       const wpm = Math.round(plainText.length  / (duration / 60))   // 每分钟字符数
       const accuracy = Math.round((plainText.length - mistakes) / plainText.length * 100)
       const score = Math.round(wpm/2 * (accuracy / 100)) - backspace
-      setScore(lv.id, { score, wpm, accuracy, backspace, duration, ts: Date.now() })
+      ProgressManager.setScore(lv.id, { score, wpm, accuracy, backspace, duration, ts: Date.now() })
+      const allCompleted = levels.every(l => ProgressManager.getCompleted().includes(l.id))
 
       modals.open({
         title: '统计',

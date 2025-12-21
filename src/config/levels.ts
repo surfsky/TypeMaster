@@ -228,5 +228,48 @@ zyb_game.prop() // 显示道具
 load show key down up shoot move property actor update music play duck piano monster choir`,
   },
 
+  // python exam
+  {
+    id: 'pythonexam-01',
+    cat: 'PythonExam',
+    title: '计算 a * b',
+    fontSize: 20,
+    text: `a = int(input())
+b = int(input())
+print(a * b)`,
+  },
+  {
+    id: 'pythonexam-02',
+    cat: 'PythonExam',
+    title: '循环计算几个输入数字的和',
+    fontSize: 20,
+    text: `s = 0
+for i in range(3):
+    a = int(input())
+    s += a
+print(s)`,
+  },
+  {
+    id: 'pythonexam-03',
+    cat: 'PythonExam',
+    title: '循环输出文本',
+    fontSize: 20,
+    text: `for i in range(3):
+    print('good good study')`,
+  },
+  {
+    id: 'pythonexam-04',
+    cat: 'PythonExam',
+    title: '逻辑判断',
+    fontSize: 20,
+    text: `a = int(input())
+if a > 20:
+    print('greater')
+elif a == 20:
+    print('equal')
+else:
+    print('less')`,
+  },
+
 
 ]
