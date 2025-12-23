@@ -38,6 +38,10 @@ export default defineConfig({
         {
           src: 'src/assets/sounds/*',
           dest: 'assets/sounds'
+        },
+        {
+          src: 'src/assets/levels.json',
+          dest: 'assets'
         }
       ]
     })

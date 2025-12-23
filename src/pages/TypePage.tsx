@@ -1,11 +1,11 @@
-import { ActionIcon, Box, Button, Grid, Group, Modal, Paper, Slider, Stack, Switch, Text, Title, Transition } from '@mantine/core'
+import { ActionIcon, Box, Button, Center, Grid, Group, Loader, Modal, Paper, Slider, Stack, Switch, Text, Title, Transition } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { modals } from '@mantine/modals'
 import { IconArrowBack, IconRotateClockwise, IconSettings } from '@tabler/icons-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Keyboard from '../components/Keyboard'
-import { levels } from '../config/levels'
+import { getLevels } from '../config/levels'
 import type { Level } from '../config/levels'
 import { ProgressManager } from '../config/progress'
 import { Howl } from 'howler'
@@ -120,10 +120,16 @@ function LineWithComment({
 export default function TypePage() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const lv = levels.find((o: Level) => o.id === id)!
+  
+  const [allLevels, setAllLevels] = useState<Level[]>([])
+  useEffect(() => {
+    getLevels().then(setAllLevels)
+  }, [])
+  
+  const lv = useMemo(() => allLevels.find((o: Level) => o.id === id), [allLevels, id])
 
   const [idx, setIdx] = useState(0)
-  const [fontSize, setFontSize] = useState(lv.fontSize || 36)
+  const [fontSize, setFontSize] = useState(36)
   const [startTime, setStartTime] = useState(0)
   const [mistakes, setMistakes] = useState(0)
   const [backspace, setBackspace] = useState(0)
@@ -135,11 +141,13 @@ export default function TypePage() {
   const [settingsOpened, { open: openSettings, close: closeSettings }] = useDisclosure(false)
 
   useEffect(() => {
-    setFontSize(lv.fontSize || 36)
-  }, [id, lv.fontSize])
+    if (lv) {
+      setFontSize(lv.fontSize || 36)
+    }
+  }, [lv])
 
   // 解析正文与注释
-  const parsedLines = useMemo(() => parseTextWithComment(lv.text), [lv.text])
+  const parsedLines = useMemo(() => lv ? parseTextWithComment(lv.text) : [], [lv])
   // 仅正文的连续字符串（用于打字判定）
   const plainText = parsedLines.map(l => l.text).join('\n')
 
@@ -162,14 +170,14 @@ export default function TypePage() {
   /**前往下一关（按顺序） */
   const goToNextLevel = useCallback(() => {
     if (!id) return
-    const currentIndex = levels.findIndex(lv => lv.id === id)
+    const currentIndex = allLevels.findIndex(lv => lv.id === id)
     if (currentIndex === -1) return
     
     const nextIndex = currentIndex + 1
     
-    if (nextIndex < levels.length) {
+    if (nextIndex < allLevels.length) {
       // 跳到下一关
-      navigate(`/type/${levels[nextIndex].id}`)
+      navigate(`/type/${allLevels[nextIndex].id}`)
       reset()
     } else {
       // 已到达最后一关
@@ -188,7 +196,10 @@ export default function TypePage() {
         ),
       })
     }
-  }, [id, navigate, reset])
+  }, [id, navigate, reset, allLevels])
+
+  const displayFontSize = showKeyboard ? fontSize : Math.floor(fontSize * 1.5)
+
 
   /**
    * 处理按键
@@ -285,14 +296,14 @@ export default function TypePage() {
    * 显示统计信息
    */
   useEffect(() => {
-    if (idx === plainText.length && plainText.length > 0) {
-      ProgressManager.setCompleted(lv.id)
+    if (lv && idx === plainText.length && plainText.length > 0) {
+      ProgressManager.setCompleted(lv!.id)
       const duration = (Date.now() - startTime) / 1000
-      const wpm = Math.round(plainText.length  / (duration / 60))   // 每分钟字符数
+      const wpm = Math.round(plainText.length / (duration / 60))   // 每分钟字符数
       const accuracy = Math.round((plainText.length - mistakes) / plainText.length * 100)
-      const score = Math.round(wpm/2 * (accuracy / 100)) - backspace
-      ProgressManager.setScore(lv.id, { score, wpm, accuracy, backspace, duration, ts: Date.now() })
-      const allCompleted = levels.every(l => ProgressManager.getCompleted().includes(l.id))
+      const score = Math.max(0, Math.round(wpm / 2 * (accuracy / 100)) - backspace)
+      ProgressManager.setScore(lv!.id, { score, wpm, accuracy, backspace, duration, ts: Date.now() })
+      const allCompleted = allLevels.every(l => ProgressManager.getCompleted().includes(l.id))
 
       modals.open({
         title: '统计',
@@ -331,7 +342,9 @@ export default function TypePage() {
         ),
       })
     }
-  }, [idx, lv.id, plainText.length, startTime, mistakes, backspace, goToNextLevel, reset, errors])
+  }, [idx, lv?.id, plainText.length, startTime, mistakes, backspace, goToNextLevel, reset, errors, allLevels])
+
+  if (!lv) return <Center h="100vh"><Loader /></Center>
 
   return (
     <Stack p="md" style={{ height: '100vh' }}>
@@ -355,9 +368,13 @@ export default function TypePage() {
           userSelect: 'none',
           fontFamily: 'monospace',
           letterSpacing: 2,
-          display: 'inline-block',
+          display: showKeyboard ? 'inline-block' : 'flex',
+          justifyContent: showKeyboard ? 'flex-start' : 'center',
+          alignItems: showKeyboard ? 'flex-start' : 'center',
           textAlign: 'left',
           padding: '16px',
+          width: showKeyboard ? 'auto' : '100%',
+          minHeight: showKeyboard ? 'auto' : '60vh',
         }}>
           <Box style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
             {parsedLines.map((line, lineIdx) => {
@@ -372,7 +389,7 @@ export default function TypePage() {
                     startIdx={startIdx}
                     idx={idx}
                     errors={errors}
-                    fontSize={fontSize}
+                    fontSize={displayFontSize}
                   />
                 </Box>
               )

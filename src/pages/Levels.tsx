@@ -1,12 +1,18 @@
 import { SimpleGrid, Card, Group, Badge, Title, Text, Button, Stack } from '@mantine/core'
 import { useNavigate } from 'react-router-dom'
-import { levels } from '../config/levels'
-import { useMemo } from 'react'
+import { getLevels } from '../config/levels'
+import type { Level } from '../config/levels'
+import { useMemo, useState, useEffect } from 'react'
 import { ProgressManager } from '../config/progress'
 
 /**关卡页面：展示关卡列表 */
 function Levels() {
   const nav = useNavigate()
+  const [levels, setLevels] = useState<Level[]>([])
+
+  useEffect(() => {
+    getLevels().then(setLevels)
+  }, [])
 
   const groupedLevels = useMemo(() => {
     return levels.reduce((acc, level) => {
@@ -15,8 +21,8 @@ function Levels() {
       }
       acc[level.cat].push(level)
       return acc
-    }, {} as Record<string, typeof levels>)
-  }, [])
+    }, {} as Record<string, Level[]>)
+  }, [levels])
 
   /**进入打字页面 */
   function go(id: string) {
