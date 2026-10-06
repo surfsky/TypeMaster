@@ -36,7 +36,7 @@ function normalizeLevels(items: RawLevel[]): Level[] {
 export const getLevels = async (): Promise<Level[]> => {
   if (levelsCache) return levelsCache;
   try {
-    const url = import.meta.env.DEV ? '/src/assets/levels.json' : '/assets/levels.json';
+    const url = `${import.meta.env.BASE_URL}assets/levels.json`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error('Failed to load levels');
