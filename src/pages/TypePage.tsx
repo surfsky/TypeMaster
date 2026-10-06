@@ -22,16 +22,54 @@ const backSound = new Howl({src: [backSoundFile]});
 
 
 
-/** 将含 // 注释的文本拆成正文+注释（行末\n归入注释） */
-function parseTextWithComment(raw: string) {
+/**Get comment markers */
+function getCommentStrings(commentString?: string | string[]) {
+  if (Array.isArray(commentString)) {
+    return commentString.filter(Boolean)
+  }
+  if (commentString) {
+    return [commentString]
+  }
+  return ['//']
+}
+
+/**Find comment start in one line */
+function findCommentStart(line: string, marks: string[]) {
+  let startIdx = -1
+
+  for (const item of marks) {
+    const idx = line.indexOf(item)
+    if (idx !== -1 && (startIdx === -1 || idx < startIdx)) {
+      startIdx = idx
+    }
+  }
+
+  return { startIdx }
+}
+
+/**Move spaces before comment into comment part */
+function getCommentTextStart(line: string, commentIdx: number) {
+  let textEnd = commentIdx
+
+  while (textEnd > 0 && (line[textEnd - 1] === ' ' || line[textEnd - 1] === '\t')) {
+    textEnd -= 1
+  }
+
+  return textEnd
+}
+
+/** 将含注释的文本拆成正文+注释（行末\n归入注释） */
+function parseTextWithComment(raw: string, commentString?: string | string[]) {
+  const marks = getCommentStrings(commentString)
   const lines = raw.split('\n')
   return lines.map((line, i) => {
-    const idx = line.indexOf('//')
-    const hasComment = idx !== -1
-    // 正文：不含 // 的部分，且去掉尾部空格
-    const text = hasComment ? line.slice(0, idx).replace(/\s+$/, '') : line.replace(/\s+$/, '')
-    // 注释：含 // 到行尾，再加上本行后的 \n（最后一行除外）
-    let comment = hasComment ? line.slice(idx) : undefined
+    const { startIdx } = findCommentStart(line, marks)
+    const hasComment = startIdx !== -1
+    const textEnd = hasComment ? getCommentTextStart(line, startIdx) : line.length
+    // 正文：不含注释的部分
+    const text = hasComment ? line.slice(0, textEnd) : line.replace(/\s+$/, '')
+    // 注释：包含注释前的对齐空格、注释标记到行尾，再加上本行后的 \n（最后一行除外）
+    let comment = hasComment ? line.slice(textEnd) : undefined
     if (i < lines.length - 1 && comment !== undefined) {
       comment += '\n'
     }
@@ -83,7 +121,7 @@ function LineWithComment({
   if (line.comment) {
     const commentText = line.comment.replace(/\n$/, '')
     chars.push(
-      <Text key="comment" component="span" c="yellow.6" style={{ fontSize, opacity: 0.75 }}>
+      <Text key="comment" component="span" c="yellow.6" style={{ fontSize, opacity: 0.75, whiteSpace: 'pre' }}>
         {commentText}
       </Text>
     )
@@ -147,7 +185,7 @@ export default function TypePage() {
   }, [lv])
 
   // 解析正文与注释
-  const parsedLines = useMemo(() => lv ? parseTextWithComment(lv.text) : [], [lv])
+  const parsedLines = useMemo(() => lv ? parseTextWithComment(lv.text, lv.commentString) : [], [lv])
   // 仅正文的连续字符串（用于打字判定）
   const plainText = parsedLines.map(l => l.text).join('\n')
 

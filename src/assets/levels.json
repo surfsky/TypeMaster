@@ -3,19 +3,31 @@
     "id": "base-01",
     "cat": "基础",
     "title": "中排字母",
-    "text": "asdf gh jkl; asdf gh jkl;\n// 双键重复\naass ddff gghh jjkk ll;; aass ddff gghh jjkk ll;;"
+    "textLines": [
+      "asdf gh jkl; asdf gh jkl;",
+      "aass ddff gghh jjkk ll;;",
+      "aass ddff gghh jjkk ll;;"
+    ]
   },
   {
     "id": "base-02",
     "cat": "基础",
     "title": "上排字母",
-    "text": "qwer ty uiop qwer op tyui\nqqww eerr ttyy uuii oopp qqww eerr ttyy uuii oopp"
+    "textLines": [
+      "qwer ty uiop qwer op tyui",
+      "qqww eerr ttyy uuii oopp",
+      "qqww eerr ttyy uuii oopp"
+    ]
   },
   {
     "id": "base-03",
     "cat": "基础",
     "title": "下排字母",
-    "text": "zxcv bn m,./ zxcv bn m,./\nzzxx ccvv bbnn mm,, ././ zzxx ccvv bbnn mm,, ././"
+    "textLines": [
+      "zxcv bn m,./ zxcv bn m,./",
+      "zzxx ccvv bbnn mm,, ././",
+      "zzxx ccvv bbnn mm,, ././"
+    ]
   },
   {
     "id": "base-04",
@@ -33,69 +45,104 @@
     "id": "base-06",
     "cat": "基础",
     "title": "综合",
-    "text": "The quick brown fox jumps over the lazy dog!!!\nThe quick brown fox jumps over the lazy dog!!!\nThe quick brown fox jumps over the lazy dog!!!\nThe quick brown fox jumps over the lazy dog!!!"
+    "textLines": [
+      "The quick brown fox jumps over the lazy dog!!!",
+      "The quick brown fox jumps over the lazy dog!!!",
+      "The quick brown fox jumps over the lazy dog!!!",
+      "The quick brown fox jumps over the lazy dog!!!"
+    ]
   },
   {
     "id": "english-01",
     "cat": "English",
     "title": "水果 fruits",
-    "text": "apple orange pear grape banana watermelon peach mango pineapple durian strawberry blueberry raspberry cherry\napple orange pear grape banana watermelon peach mango pineapple durian strawberry blueberry raspberry cherry"
+    "textLines": [
+      "apple orange pear grape banana watermelon peach mango pineapple durian strawberry blueberry raspberry cherry",
+      "apple orange pear grape banana watermelon peach mango pineapple durian strawberry blueberry raspberry cherry"
+    ]
   },
   {
     "id": "english-02",
     "cat": "English",
     "title": "文具 stationery",
-    "text": "pen pencil paper eraser ruler compass scale tape measure marker crayon notebook folder scissors glue\npen pencil paper eraser ruler compass scale tape measure marker crayon notebook folder scissors glue"
+    "textLines": [
+      "pen pencil paper eraser ruler compass scale tape measure marker crayon notebook folder scissors glue",
+      "pen pencil paper eraser ruler compass scale tape measure marker crayon notebook folder scissors glue"
+    ]
   },
   {
     "id": "english-03",
     "cat": "English",
     "title": "味道 tasty",
-    "text": "sweet sour salty bitter spicy hot tangy umami creamy buttery nutty fruity herbal earthy smoky garlicky oniony\nsweet sour salty bitter spicy hot tangy umami creamy buttery nutty fruity herbal earthy smoky garlicky oniony"
+    "textLines": [
+      "sweet sour salty bitter spicy hot tangy umami creamy buttery nutty fruity herbal earthy smoky garlicky oniony",
+      "sweet sour salty bitter spicy hot tangy umami creamy buttery nutty fruity herbal earthy smoky garlicky oniony"
+    ]
   },
   {
     "id": "anmial-01",
     "cat": "Animal",
     "title": "陆生动物 land",
-    "text": "cat dog goat pig rabbit fox bear tiger lion panda zebra mouse giraffe camel hippo mouse\ncat dog goat pig rabbit fox bear tiger lion panda zebra mouse giraffe camel hippo mouse"
+    "textLines": [
+      "cat dog goat pig rabbit fox bear tiger lion panda zebra mouse giraffe camel hippo mouse",
+      "cat dog goat pig rabbit fox bear tiger lion panda zebra mouse giraffe camel hippo mouse"
+    ]
   },
   {
     "id": "anmial-02",
     "cat": "Animal",
     "title": "树生动物 tree",
-    "text": "monkey ape gorilla koala sloth squirrel chipmunk kangaroo lemur\nmonkey ape gorilla koala sloth squirrel chipmunk kangaroo lemur"
+    "textLines": [
+      "monkey ape gorilla koala sloth squirrel chipmunk kangaroo lemur",
+      "monkey ape gorilla koala sloth squirrel chipmunk kangaroo lemur"
+    ]
   },
   {
     "id": "anmial-03",
     "cat": "Animal",
     "title": "鸟类 bird",
-    "text": "bird pigeon swan goose cock hen sparrow woodpecker owl parrot eagle crane heron flamingo\nbird pigeon swan goose cock hen sparrow woodpecker owl parrot eagle crane heron flamingo"
+    "textLines": [
+      "bird pigeon swan goose cock hen sparrow woodpecker owl parrot eagle crane heron flamingo",
+      "bird pigeon swan goose cock hen sparrow woodpecker owl parrot eagle crane heron flamingo"
+    ]
   },
   {
     "id": "anmial-04",
     "cat": "Animal",
     "title": "水生动物 water",
-    "text": "shark salmon goldfish dolphin tuna seal whale octopus squid crab shrimp penguin crocodile\nshark salmon goldfish dolphin tuna seal whale octopus squid crab shrimp penguin crocodile"
+    "textLines": [
+      "shark salmon goldfish dolphin tuna seal whale octopus squid crab shrimp penguin crocodile",
+      "shark salmon goldfish dolphin tuna seal whale octopus squid crab shrimp penguin crocodile"
+    ]
   },
   {
     "id": "anmial-05",
     "cat": "Animal",
     "title": "昆虫 bug",
-    "text": "ant bee beetle butterfly dragonfly firebug mosquito ladybug spider caterpillar grasshopper cockroach termite\nant bee beetle butterfly dragonfly firebug mosquito ladybug spider caterpillar grasshopper cockroach termite"
+    "textLines": [
+      "ant bee beetle butterfly dragonfly firebug mosquito ladybug spider caterpillar grasshopper cockroach termite",
+      "ant bee beetle butterfly dragonfly firebug mosquito ladybug spider caterpillar grasshopper cockroach termite"
+    ]
   },
   {
     "id": "python-01",
     "cat": "Python",
     "title": "关键字 key words",
     "fontSize": 20,
-    "text": "python string int for in while True False continue break if else elif\npython string int for in while True False continue break if else elif"
+    "textLines": [
+      "python string int for in while True False continue break if else elif",
+      "python string int for in while True False continue break if else elif"
+    ]
   },
   {
     "id": "python-02",
     "cat": "Python",
     "title": "方法 functions",
     "fontSize": 20,
-    "text": "input() abs() int() random() shuffle() str() print() len() range() list() dict() set() type() open()\ninput() abs() int() random() shuffle() str() print() len() range() list() dict() set() type() open()"
+    "textLines": [
+      "input() abs() int() random() shuffle() str() print() len() range() list() dict() set() type() open()",
+      "input() abs() int() random() shuffle() str() print() len() range() list() dict() set() type() open()"
+    ]
   },
   {
     "id": "python-03",
@@ -108,63 +155,420 @@
     "id": "zyb-01",
     "cat": "作业帮",
     "title": "zyb_ui module",
-    "fontSize": 20,
-    "text": "import zyb_ui // 导入作业帮UI模块\nzyb_ui.preview(img)   // 预览图片\ns = zyb_ui.enter('input password') // 显示一个弹窗，提示输入密码\nzyb_ui.message('text', 'pic.jpg')  // 显示一条消息，包含文本和图片\nfile = zyb_ui.pick_file() // 显示一个弹窗，提示用户选择文件\nstyle = zyb_ui.pick_button('select style', ['cartoon', 'pixel', 'realistic']) // 显示一个弹窗，提示用户选择图片风格\nitems = zyb_ui.pick_multi('title', dict) // 显示一个弹窗，提示用户选择多个选项\nfor key in items:  // 遍历用户选择的选项\n    print(key, items[key]) // 打印每个选项的键和值\n"
+    "fontSize": 16,
+    "commentString": "#",
+    "textLines": [
+      "import zyb_ui                                       # 导入作业帮UI模块",
+      "zyb_ui.preview(img)                                 # 预览图片",
+      "s = zyb_ui.enter('input password')                  # 显示一个弹窗，提示输入密码",
+      "zyb_ui.message('text', 'pic.jpg')                   # 显示一条消息，包含文本和图片",
+      "file = zyb_ui.pick_file()                           # 显示一个弹窗，提示用户选择文件",
+      "style = zyb_ui.pick_button('select style', ['cartoon', 'pixel', 'realistic']) # 显示一个弹窗，提示用户选择图片风格",
+      "items = zyb_ui.pick_multi('title', dict)            # 显示一个弹窗，提示用户选择多个选项",
+      "for key in items:                                   # 遍历用户选择的选项",
+      "    print(key, items[key])                          # 打印每个选项的键和值",
+      ""
+    ]
   },
   {
     "id": "zyb-02",
     "cat": "作业帮",
     "title": "zyb_ai module",
-    "fontSize": 20,
-    "text": "import zyb_ai // 导入作业帮AI模块\nzyb_ai.speak('This is a test.') // 语音合成\nzyb_ai.chat('Why can the bird fly?') // 聊天\nimg = zyb_ai.draw('This is picture description', 6) // 绘制图片\nzyb_ui.preview(img)   // 预览图片\nc = zyb_ai.calorie('food1.jpg') // 计算卡路里\nb = zyb_ai.is_animal('1.png') // 判断是否为动物\ni = zyb_ai.animal_info('1.png') // 获取动物信息\np = zyb_ai.effect('1.png', 1) // 动物特效\nn = zyb_ai.face_compare('a.jpg', 'b.jpg') // 人脸对比\n"
+    "fontSize": 16,
+    "commentString": "#",
+    "textLines": [
+      "import zyb_ai                                       # 导入作业帮AI模块",
+      "zyb_ai.speak('This is a test.')                     # 语音合成",
+      "zyb_ai.chat('Why can the bird fly?')                # 聊天",
+      "img = zyb_ai.draw('This is picture description', 6) # 绘制图片",
+      "zyb_ui.preview(img)                                 # 预览图片",
+      "c = zyb_ai.calorie('food1.jpg')                     # 计算卡路里",
+      "b = zyb_ai.is_animal('1.png')                       # 判断是否为动物",
+      "i = zyb_ai.animal_info('1.png')                     # 获取动物信息",
+      "p = zyb_ai.effect('1.png', 1)                       # 动物特效",
+      "n = zyb_ai.face_compare('a.jpg', 'b.jpg')           # 人脸对比",
+      ""
+    ]
   },
   {
     "id": "zyb-03",
     "cat": "作业帮",
     "title": "zyb_xz module",
     "fontSize": 20,
-    "text": "import zyb_xz // 导入作业帮小智模块\nzyb_xz.light_on('red')  // 打开红色灯\nzyb_xz.light_off()  // 关闭所有灯\nzyb_xz.sleep(3)  // 休息3秒\nt = zyb_xz.get_time() // 获取当前时间\nzyb_xz.music_play('1.mp3') // 播放音乐\nzyb_xz.screen('touch fish') // 屏幕触摸\nd = zyb_xz.sonic('L1') // 触发声传感器\ns = zyb_xz.asr('P2') // 语音识别\nzyb_xz.servo('P1', 90) // 控制舵机\nzyb_xz.moto_run('M1', 0, 30) // 运行电机\nzyb_xz.moto_stop('M1') // 停止电机\n"
+    "commentString": "#",
+    "textLines": [
+      "import zyb_xz                # 导入作业帮小智模块",
+      "zyb_xz.light_on('red')       # 打开红色灯",
+      "zyb_xz.light_off()           # 关闭所有灯",
+      "zyb_xz.sleep(3)              # 休息3秒",
+      "t = zyb_xz.get_time()        # 获取当前时间",
+      "zyb_xz.music_play('1.mp3')   # 播放音乐",
+      "zyb_xz.screen('touch fish')  # 屏幕触摸",
+      "d = zyb_xz.sonic('L1')       # 触发声传感器",
+      "s = zyb_xz.asr('P2')         # 语音识别",
+      "zyb_xz.servo('P1', 90)       # 控制舵机",
+      "zyb_xz.moto_run('M1', 0, 30) # 运行电机",
+      "zyb_xz.moto_stop('M1')       # 停止电机",
+      ""
+    ]
   },
   {
     "id": "zyb-04",
     "cat": "作业帮",
     "title": "zyb_game module",
     "fontSize": 20,
-    "text": "import zyb_game // 导入作业帮游戏模块\nzyb_game.window(800, 600, 'title') // 创建游戏窗口\nbg = zyb_game.actor('1.png') // 创建背景演员\nwhile True:\n    zyb_game.update() // 更新游戏状态\n    key = zyb_game.mouse_down() // 检查鼠标是否按下\n    if (key == 'left'):\n        bg.image = '2.jpg' // 当按下左键时，改变背景图片\nzyb_game.key_down() // 检查键盘是否按下\nzyb_game.key_up() // 检查键盘是否松开\nzyb_game.music_play() // 播放音乐\nzyb_game.shoot() // 发射子弹\nzyb_game.move() // 移动演员\nzyb_game.prop() // 显示道具\n"
+    "commentString": "#",
+    "textLines": [
+      "import zyb_game                      # 导入作业帮游戏模块",
+      "zyb_game.window(800, 600, 'title')   # 创建游戏窗口",
+      "bg = zyb_game.actor('1.png')         # 创建背景演员",
+      "while True:",
+      "    zyb_game.update()                # 更新游戏状态",
+      "    key = zyb_game.mouse_down()      # 检查鼠标是否按下",
+      "    if (key == 'left'):",
+      "        bg.image = '2.jpg'           # 当按下左键时，改变背景图片",
+      "zyb_game.key_down()                  # 检查键盘是否按下",
+      "zyb_game.key_up()                    # 检查键盘是否松开",
+      "zyb_game.music_play()                # 播放音乐",
+      "zyb_game.shoot()                     # 发射子弹",
+      "zyb_game.move()                      # 移动演员",
+      "zyb_game.prop()                      # 显示道具",
+      ""
+    ]
   },
   {
     "id": "zyb-05",
     "cat": "作业帮",
     "title": "zyb words",
     "fontSize": 20,
-    "text": "load show key down up shoot move property actor update music play duck piano monster choir\nload show key down up shoot move property actor update music play duck piano monster choir"
+    "commentString": "//",
+    "textLines": [
+      "load show key down up shoot move property actor update music play duck piano monster choir",
+      "load show key down up shoot move property actor update music play duck piano monster choir"
+    ]
   },
   {
     "id": "pythonexam-01",
     "cat": "PythonExam",
     "title": "计算 a * b",
     "fontSize": 20,
-    "text": "a = int(input())\nb = int(input())\nprint(a * b)"
+    "textLines": [
+      "a = int(input())",
+      "b = int(input())",
+      "print(a * b)"
+    ]
   },
   {
     "id": "pythonexam-02",
     "cat": "PythonExam",
     "title": "循环计算几个输入数字的和",
     "fontSize": 20,
-    "text": "s = 0\nfor i in range(3):\n    a = int(input())\n    s += a\nprint(s)"
+    "textLines": [
+      "s = 0",
+      "for i in range(3):",
+      "    a = int(input())",
+      "    s += a",
+      "print(s)"
+    ]
   },
   {
     "id": "pythonexam-03",
     "cat": "PythonExam",
     "title": "循环输出文本",
     "fontSize": 20,
-    "text": "for i in range(3):\n    print('good good study')"
+    "textLines": [
+      "for i in range(3):",
+      "    print('good good study')"
+    ]
   },
   {
     "id": "pythonexam-04",
     "cat": "PythonExam",
     "title": "逻辑判断",
     "fontSize": 20,
-    "text": "a = int(input())\nif a > 20:\n    print('greater')\nelif a == 20:\n    print('equal')\nelse:\n    print('less')"
+    "textLines": [
+      "a = int(input())",
+      "if a > 20:",
+      "    print('greater')",
+      "elif a == 20:",
+      "    print('equal')",
+      "else:",
+      "    print('less')"
+    ]
+  },
+  {
+    "id": "pythonexam-05",
+    "cat": "PythonExam",
+    "title": "余额问题",
+    "fontSize": 20,
+    "commentString": "#",
+    "textLines": [
+      "a = int(input())  # 输入总金额",
+      "b = int(input())  # 输入笔的数量",
+      "a -= 20 * 3       # 扣除笔记本金额",
+      "a -= 3 * b        # 扣除笔金额",
+      "print(a)          # 打印余额"
+    ]
+  },
+  {
+    "id": "pythonexam-06",
+    "cat": "PythonExam",
+    "title": "数列匹配（攻防血量）",
+    "fontSize": 20,
+    "commentString": "#",
+    "textLines": [
+      "lst = [3, 5, 8, 10, 12]        # 定义攻击力数组",
+      "n = 0                          # 初始化防御计数器",
+      "a = int(input())               # 输入防御力",
+      "for x in lst:                  # 遍历攻击力数组",
+      "    if a >= x:                 # 如果防御力大于等于攻击力",
+      "        n += 1                 # 防御计数器加1",
+      "    else:                      # 如果防御力小于攻击力",
+      "        break                  # 跳出循环，防御力不足",
+      "print(n)                       # 打印防御计数器"
+    ]
+  },
+  {
+    "id": "pythonexam-07",
+    "cat": "PythonExam",
+    "title": "递增",
+    "fontSize": 20,
+    "commentString": "#",
+    "textLines": [
+      "a = 5                          # 初始化变量",
+      "for i in range(9):             # 循环9次，每次递增10",
+      "    a += 10                    # 每次递增10",
+      "print(a)                       # 打印当前值"
+    ]
+  },
+  {
+    "id": "pythonexam-08",
+    "cat": "PythonExam",
+    "title": "数列后两位相加（跳绳递增）",
+    "fontSize": 20,
+    "commentString": "#",
+    "textLines": [
+      "lst = [5, 5]                   # 初始化数列，包含前两位",
+      "for x in range(8):             # 循环8次，每次递增1",
+      "    k = lst[-1] + lst[-2]      # 计算新项，即前两项的和",
+      "    lst.append(k)              # 将新项添加到数列",
+      "print(lst)                     # 打印数列"
+    ]
+  },
+  {
+    "id": "pygame-01",
+    "cat": "PyGameZero",
+    "title": "创建场景和角色",
+    "fontSize": 16,
+    "commentString": "#",
+    "textLines": [
+      "WIDTH = 800",
+      "HEIGHT = 600",
+      "TITLE = 'Create Scene'",
+      "",
+      "hero = Actor('alien')",
+      "hero.pos = (400, 300)",
+      "",
+      "def draw():",
+      "    # Draw scene and hero",
+      "    screen.fill((30, 30, 40))",
+      "    hero.draw()",
+      "    screen.draw.text('Hero', (360, 90), fontsize=36, color='white')"
+    ]
+  },
+  {
+    "id": "pygame-02",
+    "cat": "PyGameZero",
+    "title": "按键移动角色",
+    "fontSize": 16,
+    "commentString": "#",
+    "textLines": [
+      "WIDTH = 800",
+      "HEIGHT = 600",
+      "TITLE = 'Move Hero'",
+      "",
+      "hero = Actor('alien')",
+      "hero.pos = (400, 300)",
+      "speed = 4",
+      "",
+      "def draw():",
+      "    # Draw scene and hero",
+      "    screen.fill((20, 20, 30))",
+      "    hero.draw()",
+      "",
+      "def update():",
+      "    # Move hero with keyboard",
+      "    if keyboard.LEFT:",
+      "        hero.x -= speed",
+      "    if keyboard.RIGHT:",
+      "        hero.x += speed",
+      "    if keyboard.UP:",
+      "        hero.y -= speed",
+      "    if keyboard.DOWN:",
+      "        hero.y += speed",
+      "",
+      "    if hero.left < 0:",
+      "        hero.left = 0",
+      "    if hero.right > WIDTH:",
+      "        hero.right = WIDTH",
+      "    if hero.top < 0:",
+      "        hero.top = 0",
+      "    if hero.bottom > HEIGHT:",
+      "        hero.bottom = HEIGHT"
+    ]
+  },
+  {
+    "id": "pygame-03",
+    "cat": "PyGameZero",
+    "title": "角色和敌人碰撞检测",
+    "fontSize": 16,
+    "commentString": "#",
+    "textLines": [
+      "WIDTH = 800",
+      "HEIGHT = 600",
+      "TITLE = 'Hit Enemy'",
+      "",
+      "hero = Actor('alien')",
+      "enemy = Actor('alien')",
+      "hero.pos = (120, 300)",
+      "enemy.pos = (650, 300)",
+      "msg = 'Use arrow keys to hit enemy'",
+      "",
+      "def draw():",
+      "    # Draw scene and objects",
+      "    screen.fill((25, 25, 35))",
+      "    hero.draw()",
+      "    enemy.draw()",
+      "    screen.draw.text(msg, (20, 20), fontsize=32, color='white')",
+      "",
+      "def update():",
+      "    # Move hero and detect collision",
+      "    global msg",
+      "",
+      "    if keyboard.LEFT:",
+      "        hero.x -= 4",
+      "    if keyboard.RIGHT:",
+      "        hero.x += 4",
+      "    if keyboard.UP:",
+      "        hero.y -= 4",
+      "    if keyboard.DOWN:",
+      "        hero.y += 4",
+      "",
+      "    if hero.left < 0:",
+      "        hero.left = 0",
+      "    if hero.right > WIDTH:",
+      "        hero.right = WIDTH",
+      "    if hero.top < 0:",
+      "        hero.top = 0",
+      "    if hero.bottom > HEIGHT:",
+      "        hero.bottom = HEIGHT",
+      "",
+      "    if hero.colliderect(enemy):",
+      "        msg = 'Hit!'"
+    ]
+  },
+  {
+    "id": "pygame-04",
+    "cat": "PyGameZero",
+    "title": "鼠标和角色碰撞检测",
+    "fontSize": 16,
+    "commentString": "#",
+    "textLines": [
+      "WIDTH = 800",
+      "HEIGHT = 600",
+      "TITLE = 'Mouse Hit Test'",
+      "",
+      "hero = Actor('alien')",
+      "hero.pos = (400, 300)",
+      "msg = 'Click the alien'",
+      "",
+      "def draw():",
+      "    # Draw scene and hero",
+      "    screen.fill((30, 30, 45))",
+      "    hero.draw()",
+      "    screen.draw.text(msg, (20, 20), fontsize=32, color='white')",
+      "",
+      "def on_mouse_down(pos, button):",
+      "    # Detect mouse hit",
+      "    global msg",
+      "",
+      "    if button == mouse.LEFT and hero.collidepoint(pos):",
+      "        msg = 'Good job!'",
+      "    else:",
+      "        msg = 'Try again'"
+    ]
+  },
+  {
+    "id": "pygame-05",
+    "cat": "PyGameZero",
+    "title": "按空格旋转角色",
+    "fontSize": 16,
+    "commentString": "#",
+    "textLines": [
+      "WIDTH = 800",
+      "HEIGHT = 600",
+      "TITLE = 'Press Space'",
+      "",
+      "hero = Actor('alien')",
+      "hero.pos = (400, 300)",
+      "msg = 'Press SPACE to rotate hero'",
+      "",
+      "def draw():",
+      "    # Draw scene and hero",
+      "    screen.fill((35, 35, 45))",
+      "    hero.draw()",
+      "    screen.draw.text(msg, (20, 20), fontsize=32, color='white')",
+      "",
+      "def on_key_down(key):",
+      "    # Rotate hero when key is pressed",
+      "    global msg",
+      "",
+      "    if key == keys.SPACE:",
+      "        if hero.angle == 0:",
+      "            hero.angle = 180",
+      "            msg = 'Hero turned around'",
+      "        else:",
+      "            hero.angle = 0",
+      "            msg = 'Press SPACE to rotate hero'"
+    ]
+  },
+  {
+    "id": "pygame-06",
+    "cat": "PyGameZero",
+    "title": "点击后定时恢复",
+    "fontSize": 16,
+    "commentString": "#",
+    "textLines": [
+      "WIDTH = 800",
+      "HEIGHT = 600",
+      "TITLE = 'Clock Demo'",
+      "",
+      "hero = Actor('alien')",
+      "hero.pos = (400, 300)",
+      "msg = 'Click the alien'",
+      "",
+      "def reset_hero():",
+      "    # Reset hero state",
+      "    global msg",
+      "    hero.pos = (400, 300)",
+      "    hero.angle = 0",
+      "    msg = 'Click the alien'",
+      "",
+      "def draw():",
+      "    # Draw scene and hero",
+      "    screen.fill((30, 30, 45))",
+      "    hero.draw()",
+      "    screen.draw.text(msg, (20, 20), fontsize=32, color='white')",
+      "",
+      "def on_mouse_down(pos):",
+      "    # Move hero and schedule reset",
+      "    global msg",
+      "",
+      "    if hero.collidepoint(pos):",
+      "        hero.pos = (560, 220)",
+      "        hero.angle = 20",
+      "        msg = 'Hit! Reset after 1 second'",
+      "        clock.schedule_unique(reset_hero, 1.0)"
+    ]
   }
 ]
