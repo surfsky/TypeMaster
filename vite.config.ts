@@ -6,7 +6,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 // https://vite.dev/config/
 export default defineConfig({
   build: {
-    outDir: 'public',
+    outDir: 'dist',
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
